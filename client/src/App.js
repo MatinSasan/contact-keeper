@@ -1,4 +1,4 @@
-import React, { Fragment, lazy, Suspense } from 'react';
+import React, { lazy, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './App.css';
 
@@ -10,7 +10,7 @@ const PageNotFound = lazy(() => import('./components/pages/PageNotFound'));
 
 const App = () => {
   return (
-    <Fragment className='App'>
+    <div className='App'>
       <Navbar />
       <div className='container'>
         <Suspense fallback={<h1>Please wait...</h1>}>
@@ -21,7 +21,7 @@ const App = () => {
           </Switch>
         </Suspense>
       </div>
-    </Fragment>
+    </div>
   );
 };
 
