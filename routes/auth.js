@@ -8,10 +8,12 @@ const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const auth = require('../middleware/auth');
 
-const postLoginValidator = [
-  check('email', 'Please include a valid email').isEmail(),
-  check('password', 'Password is required').exists()
-];
+// utils
+const {
+  postLoginValidator,
+  validationErrorHandler
+} = require('../utils/validator');
+const errorHandler = require('../utils/errorHandler');
 
 // @route   GET api/auth
 // @desc    GET logged in user
@@ -22,8 +24,7 @@ router.get('/', auth, async (req, res, next) => {
     const user = await User.findById(req.user.id).select('-password');
     res.json(user);
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Errror');
+    errorHandler(err, res);
   }
 });
 
@@ -32,10 +33,7 @@ router.get('/', auth, async (req, res, next) => {
 // @access  Public
 
 router.post('/', postLoginValidator, async (req, res, next) => {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
+  validationErrorHandler(req, res);
 
   const { email, password } = req.body;
 
@@ -63,8 +61,7 @@ router.post('/', postLoginValidator, async (req, res, next) => {
       }
     );
   } catch (err) {
-    console.error(err.message);
-    res.status(500).send('Server Error');
+    errorHandler(err, res);
   }
 });
 
