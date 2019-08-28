@@ -6,6 +6,7 @@ const config = require('config');
 const { check, validationResult } = require('express-validator');
 
 const User = require('../models/User');
+const auth = require('../middleware/auth');
 
 const postLoginValidator = [
   check('email', 'Please include a valid email').isEmail(),
@@ -16,8 +17,14 @@ const postLoginValidator = [
 // @desc    GET logged in user
 // @access  Private
 
-router.get('/', (req, res, next) => {
-  res.send('Get logged in user');
+router.get('/', auth, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json(user);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('Server Errror');
+  }
 });
 
 // @route   POST api/auth
@@ -52,7 +59,7 @@ router.post('/', postLoginValidator, async (req, res, next) => {
       { expiresIn: 3600 },
       (err, token) => {
         if (err) throw err;
-        res.json(token);
+        res.json({ token });
       }
     );
   } catch (err) {
