@@ -3,6 +3,7 @@ import { Route, Switch } from 'react-router-dom';
 import './App.css';
 
 import Navbar from './components/layout/Navbar';
+import Alerts from './components/layout/Alerts';
 
 const Home = lazy(() => import('./components/pages/Home'));
 const About = lazy(() => import('./components/pages/About'));
@@ -15,6 +16,7 @@ const App = () => {
     <div className='App'>
       <Navbar />
       <div className='container'>
+        <Alerts />
         <Suspense fallback={<h1>Please wait...</h1>}>
           <Switch>
             <Route exact path='/' component={Home} />
