@@ -35,6 +35,7 @@ coverage
 
 # my hide stuff
 default.json
+production.json
 /client/build
 
 /client/.env.local
