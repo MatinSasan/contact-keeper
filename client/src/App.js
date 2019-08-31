@@ -2,6 +2,8 @@ import React, { lazy, Suspense } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import './App.css';
 
+import setAuthToken from './utils/setAuthToken';
+
 import Navbar from './components/layout/Navbar';
 import Alerts from './components/layout/Alerts';
 
@@ -10,6 +12,10 @@ const About = lazy(() => import('./components/pages/About'));
 const PageNotFound = lazy(() => import('./components/pages/PageNotFound'));
 const Register = lazy(() => import('./components/auth/Register'));
 const Login = lazy(() => import('./components/auth/Login'));
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = () => {
   return (
